@@ -18,7 +18,8 @@ class MainApp extends StatelessWidget {
           leading: const Icon(Icons.emoji_emotions_outlined),
           title: const Text('抽選くん'),
         ),
-        body: const Center(
+        body: Center(
+          heightFactor: 1,
           child: ButtonTest(),
         ),
       ),
@@ -31,37 +32,46 @@ class MainApp extends StatelessWidget {
 // ボックスガチャは、抽選対象番号をリストに用意してその中で抽選したあと、
 // 抽選された番号をリストから消していけばよいだろう
 class ButtonTest extends HookWidget {
-  const ButtonTest({super.key});
+  final _random = Random();
+
+  ButtonTest({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final random = Random();
     final count = useState(0);
     final history = useState(<int>[]);
 
-    return Column(
-      children: [
-        Text('${count.value}'),
-        ElevatedButton(
-          onPressed: () {
-            count.value = random.nextInt(6) + 1;
-            history.value = [...history.value, count.value];
-          },
-          child: const Text('button'),
-        ),
-        Text(_generateHistoryText(history.value)),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          Text(
+            '${count.value}',
+            style: const TextStyle(
+              color: Colors.blue,
+              fontSize: 64,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              count.value = _random.nextInt(6) + 1;
+              history.value = [count.value, ...history.value];
+            },
+            child: const Text('button'),
+          ),
+          const Text('当選履歴'),
+          Text(_generateHistoryText(history.value)),
+        ],
+      ),
     );
   }
 
   String _generateHistoryText(List<int> history) {
     final buf = StringBuffer();
-    buf.write('[');
     for (final value in history) {
       buf.write(value);
-      buf.write(', ');
+      buf.writeln();
     }
-    buf.write(']');
     return buf.toString();
   }
 }
