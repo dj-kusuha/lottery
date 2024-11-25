@@ -16,7 +16,7 @@ class NumberInputWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = useTextEditingController();
+    final controller = useTextEditingController(text: defaultValue.toString());
 
     return Row(
       children: [
