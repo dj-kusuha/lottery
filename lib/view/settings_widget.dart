@@ -11,20 +11,18 @@ class SettingsWidget extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(settingsStateProvider);
 
-    return Column(
-      children: [
-        const Text("Settings"),
-        NumberInputWidget(
-          title: 'Min',
-          defaultValue: settings.min,
-          onChanged: ref.read(settingsStateProvider.notifier).setMin,
-        ),
-        NumberInputWidget(
-          title: 'Max',
-          defaultValue: settings.max,
-          onChanged: ref.read(settingsStateProvider.notifier).setMax,
-        ),
-      ],
-    );
+    return Column(children: [
+      const Text("Settings"),
+      NumberInputWidget(
+        title: 'Min',
+        defaultValue: settings.min,
+        onChanged: ref.read(settingsStateProvider.notifier).setMin,
+      ),
+      NumberInputWidget(
+        title: 'Max',
+        defaultValue: settings.max,
+        onChanged: ref.read(settingsStateProvider.notifier).setMax,
+      ),
+    ]);
   }
 }

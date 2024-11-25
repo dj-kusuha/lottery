@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:lottery/state/history_state.dart';
+import 'package:lottery/view/history_widget.dart';
 
 import 'state/settings_state.dart';
 import 'view/settings_widget.dart';
@@ -22,9 +24,12 @@ class MainApp extends StatelessWidget {
           leading: const Icon(Icons.emoji_emotions_outlined),
           title: const Text('抽選くん'),
         ),
-        body: Row(children: [
-          const SettingsWidget(),
-          ButtonTest(),
+        body: Column(children: [
+          Row(children: [
+            const SettingsWidget(),
+            ButtonTest(),
+          ]),
+          const HistoryWidget(),
         ]),
       ),
     );
@@ -43,8 +48,6 @@ class ButtonTest extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final count = useState(0);
-    final history = useState(<int>[]);
-
     final settings = ref.watch(settingsStateProvider);
 
     return SingleChildScrollView(
@@ -62,23 +65,12 @@ class ButtonTest extends HookConsumerWidget {
             onPressed: () {
               final range = settings.max - settings.min + 1;
               count.value = _random.nextInt(range) + settings.min;
-              history.value = [count.value, ...history.value];
+              ref.read(historyStateProvider.notifier).add(count.value);
             },
             child: const Text('抽選する'),
           ),
-          const Text('当選履歴'),
-          Text(_generateHistoryText(history.value)),
         ],
       ),
     );
-  }
-
-  String _generateHistoryText(List<int> history) {
-    final buf = StringBuffer();
-    for (final value in history) {
-      buf.write(value);
-      buf.writeln();
-    }
-    return buf.toString();
   }
 }
