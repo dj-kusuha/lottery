@@ -11,16 +11,21 @@ class HistoryWidget extends ConsumerWidget {
 
     return Column(children: [
       const Text('当選履歴'),
-      Text(_generateHistoryText(history)),
+      Expanded(
+        child: ListView.separated(
+          itemBuilder: (context, index) {
+            return ListTile(
+              title: Text('${history[index]}'),
+              textColor: index.isEven ? Colors.blue : Colors.orange,
+              titleTextStyle: const TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            );
+          },
+          separatorBuilder: (context, index) => const Divider(),
+          itemCount: history.length,
+        ),
+      ),
     ]);
-  }
-
-  String _generateHistoryText(List<int> history) {
-    final buf = StringBuffer();
-    for (final value in history) {
-      buf.write(value);
-      buf.writeln();
-    }
-    return buf.toString();
   }
 }

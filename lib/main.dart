@@ -29,7 +29,9 @@ class MainApp extends StatelessWidget {
             const SettingsWidget(),
             ButtonTest(),
           ]),
-          const HistoryWidget(),
+          const Expanded(
+            child: HistoryWidget(),
+          ),
         ]),
       ),
     );
