@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottery/state/history_state.dart';
+import 'package:lottery/state/roulette_state.dart';
 import 'package:lottery/view/history_widget.dart';
 
 import 'state/settings_state.dart';
@@ -24,12 +25,12 @@ class MainApp extends StatelessWidget {
           leading: const Icon(Icons.emoji_emotions_outlined),
           title: const Text('抽選くん'),
         ),
-        body: Column(children: [
+        body: const Column(children: [
           Row(children: [
-            const SettingsWidget(),
+            SettingsWidget(),
             ButtonTest(),
           ]),
-          const Expanded(
+          Expanded(
             child: HistoryWidget(),
           ),
         ]),
@@ -43,32 +44,34 @@ class MainApp extends StatelessWidget {
 // ボックスガチャは、抽選対象番号をリストに用意してその中で抽選したあと、
 // 抽選された番号をリストから消していけばよいだろう
 class ButtonTest extends HookConsumerWidget {
-  final _random = Random();
-
-  ButtonTest({super.key});
+  const ButtonTest({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final count = useState(0);
     final settings = ref.watch(settingsStateProvider);
+    final roulette = ref.watch(rouletteStateProvider);
 
     return SingleChildScrollView(
       child: Column(
         children: [
           Text(
-            '${count.value}',
-            style: const TextStyle(
-              color: Colors.blue,
+            '${roulette.value}',
+            style: TextStyle(
+              color: roulette.isSpinning ? Colors.grey : Colors.blue,
               fontSize: 64,
               fontWeight: FontWeight.bold,
             ),
           ),
           ElevatedButton(
-            onPressed: () {
-              final range = settings.max - settings.min + 1;
-              count.value = _random.nextInt(range) + settings.min;
-              ref.read(historyStateProvider.notifier).add(count.value);
-            },
+            onPressed: roulette.isSpinning
+                ? null
+                : () async {
+                    final result =
+                        await ref.read(rouletteStateProvider.notifier).spin(
+                              Duration(seconds: settings.rouletteSeconds),
+                            );
+                    ref.read(historyStateProvider.notifier).add(result);
+                  },
             child: const Text('抽選する'),
           ),
         ],
