@@ -11,7 +11,15 @@ class HistoryWidget extends ConsumerWidget {
 
     return Column(children: [
       const Text('当選履歴'),
-      Expanded(
+      Container(
+        height: 400,
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.grey,
+            width: 2,
+          ),
+        ),
         child: ListView.separated(
           itemBuilder: (context, index) {
             return ListTile(
