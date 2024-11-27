@@ -28,6 +28,7 @@ class MainApp extends StatelessWidget {
         body: const Column(children: [
           Row(children: [
             SettingsWidget(),
+            SizedBox(width: 32),
             ButtonTest(),
           ]),
           Expanded(
@@ -52,29 +53,35 @@ class ButtonTest extends HookConsumerWidget {
     final roulette = ref.watch(rouletteStateProvider);
 
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Text(
-            '${roulette.value}',
-            style: TextStyle(
-              color: roulette.isSpinning ? Colors.grey : Colors.blue,
-              fontSize: 64,
-              fontWeight: FontWeight.bold,
+      child: Container(
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.grey),
+        ),
+        child: Column(
+          children: [
+            Text(
+              '${roulette.value}',
+              style: TextStyle(
+                color: roulette.isSpinning ? Colors.grey : Colors.blue,
+                fontSize: 64,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: roulette.isSpinning
-                ? null
-                : () async {
-                    final result =
-                        await ref.read(rouletteStateProvider.notifier).spin(
-                              Duration(seconds: settings.rouletteSeconds),
-                            );
-                    ref.read(historyStateProvider.notifier).add(result);
-                  },
-            child: const Text('抽選する'),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: roulette.isSpinning
+                  ? null
+                  : () async {
+                      final result =
+                          await ref.read(rouletteStateProvider.notifier).spin(
+                                Duration(seconds: settings.rouletteSeconds),
+                              );
+                      ref.read(historyStateProvider.notifier).add(result);
+                    },
+              child: const Text('抽選する'),
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -5,11 +5,13 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 class NumberInputWidget extends HookWidget {
   final String title;
   final int defaultValue;
+  final double inputFieldWidth;
   final void Function(int value)? onChanged;
 
   const NumberInputWidget({
     super.key,
     required this.title,
+    this.inputFieldWidth = 60,
     this.defaultValue = 0,
     this.onChanged,
   });
@@ -20,17 +22,13 @@ class NumberInputWidget extends HookWidget {
 
     return Row(
       children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        Text(title),
         const SizedBox(width: 10),
         SizedBox(
-          width: 200,
+          width: inputFieldWidth,
           child: TextField(
             controller: controller,
+            textAlign: TextAlign.end,
             keyboardType: TextInputType.number,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
