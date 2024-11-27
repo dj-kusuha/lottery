@@ -1,7 +1,4 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:lottery/state/history_state.dart';
 import 'package:lottery/state/roulette_state.dart';
@@ -26,11 +23,10 @@ class MainApp extends StatelessWidget {
           title: const Text('抽選くん'),
         ),
         body: const Column(children: [
-          Row(children: [
-            SettingsWidget(),
-            SizedBox(width: 32),
-            ButtonTest(),
-          ]),
+          SettingsWidget(),
+          SizedBox(height: 32),
+          ButtonTest(),
+          SizedBox(height: 32),
           Expanded(
             child: HistoryWidget(),
           ),

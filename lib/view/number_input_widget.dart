@@ -21,6 +21,7 @@ class NumberInputWidget extends HookWidget {
     final controller = useTextEditingController(text: defaultValue.toString());
 
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: [
         Text(title),
         const SizedBox(width: 10),
