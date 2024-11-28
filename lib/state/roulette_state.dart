@@ -1,6 +1,5 @@
-import 'dart:math';
+import 'dart:math' as math;
 
-import 'package:lottery/state/settings_state.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'roulette_state.g.dart';
@@ -33,7 +32,7 @@ class Roulette {
 
 @riverpod
 class RouletteState extends _$RouletteState {
-  final _random = Random();
+  final _random = math.Random();
 
   @override
   Roulette build() {
@@ -44,7 +43,7 @@ class RouletteState extends _$RouletteState {
     );
   }
 
-  Future<int> spin(Duration duration) async {
+  Future<int> spin(int min, int max, Duration duration) async {
     state = Roulette(
       isSpinning: true,
       spinningValue: null,
@@ -55,7 +54,7 @@ class RouletteState extends _$RouletteState {
 
     while (state.isSpinning) {
       state = state.copyWith(
-        spinningValue: _getRandomValue(),
+        spinningValue: _getRandomValue(min, max),
       );
       await Future.delayed(const Duration(milliseconds: 100));
 
@@ -74,10 +73,9 @@ class RouletteState extends _$RouletteState {
     return state.result!;
   }
 
-  int _getRandomValue() {
-    final settings = ref.watch(settingsStateProvider);
-    final minValue = min(settings.max, settings.min);
-    final maxValue = max(settings.max, settings.min);
-    return _random.nextInt(maxValue - minValue + 1) + minValue;
+  int _getRandomValue(int min, int max) {
+    min = math.min(min, max);
+    max = math.max(min, max);
+    return _random.nextInt(max - min + 1) + min;
   }
 }

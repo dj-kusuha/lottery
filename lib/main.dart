@@ -71,6 +71,8 @@ class ButtonTest extends HookConsumerWidget {
                 : () async {
                     final result =
                         await ref.read(rouletteStateProvider.notifier).spin(
+                              settings.min,
+                              settings.max,
                               Duration(seconds: settings.rouletteSeconds),
                             );
                     ref.read(historyStateProvider.notifier).add(result);
