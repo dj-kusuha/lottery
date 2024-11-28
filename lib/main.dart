@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:lottery/state/history_state.dart';
-import 'package:lottery/state/roulette_state.dart';
-import 'package:lottery/view/history_widget.dart';
+import 'view/history_widget.dart';
+import 'view/lottery_widget.dart';
 
-import 'state/settings_state.dart';
 import 'view/settings_widget.dart';
 
 void main() {
@@ -27,59 +25,12 @@ class MainApp extends StatelessWidget {
             children: [
               SettingsWidget(),
               SizedBox(height: 32),
-              ButtonTest(),
+              LotteryWidget(),
               SizedBox(height: 32),
               HistoryWidget(),
             ],
           ),
         ),
-      ),
-    );
-  }
-}
-
-// NOTE: 抽選をしてヒストリーに追加していくのを表示するテスト
-// このあと最大値を入力できるようにしたり、ボックスガチャになるように修正していく
-// ボックスガチャは、抽選対象番号をリストに用意してその中で抽選したあと、
-// 抽選された番号をリストから消していけばよいだろう
-class ButtonTest extends HookConsumerWidget {
-  const ButtonTest({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final settings = ref.watch(settingsStateProvider);
-    final roulette = ref.watch(rouletteStateProvider);
-
-    return Container(
-      padding: const EdgeInsets.all(32),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey),
-      ),
-      child: Column(
-        children: [
-          Text(
-            '${roulette.value}',
-            style: TextStyle(
-              color: roulette.isSpinning ? Colors.grey : Colors.blue,
-              fontSize: 64,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          ElevatedButton(
-            onPressed: roulette.isSpinning
-                ? null
-                : () async {
-                    final result =
-                        await ref.read(rouletteStateProvider.notifier).spin(
-                              settings.min,
-                              settings.max,
-                              Duration(seconds: settings.rouletteSeconds),
-                            );
-                    ref.read(historyStateProvider.notifier).add(result);
-                  },
-            child: const Text('抽選する'),
-          ),
-        ],
       ),
     );
   }

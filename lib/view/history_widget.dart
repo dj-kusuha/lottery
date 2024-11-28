@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:lottery/state/history_state.dart';
+import '../state/history_state.dart';
 
 class HistoryWidget extends ConsumerWidget {
   const HistoryWidget({super.key});
