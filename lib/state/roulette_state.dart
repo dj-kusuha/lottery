@@ -78,6 +78,6 @@ class RouletteState extends _$RouletteState {
     final settings = ref.watch(settingsStateProvider);
     final minValue = min(settings.max, settings.min);
     final maxValue = max(settings.max, settings.min);
-    return _random.nextInt(maxValue - minValue) + minValue + 1;
+    return _random.nextInt(maxValue - minValue + 1) + minValue;
   }
 }
