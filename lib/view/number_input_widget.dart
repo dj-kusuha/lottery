@@ -6,7 +6,7 @@ class NumberInputWidget extends HookWidget {
   final String title;
   final int defaultValue;
   final double inputFieldWidth;
-  final void Function(int value)? onChanged;
+  final int Function(int value)? onChanged;
 
   const NumberInputWidget({
     super.key,
@@ -35,12 +35,14 @@ class NumberInputWidget extends HookWidget {
               FilteringTextInputFormatter.digitsOnly,
             ],
             onChanged: (value) {
-              if (onChanged != null) {
-                final intValue = int.tryParse(value);
-                if (intValue != null) {
-                  onChanged!(intValue);
-                }
-              }
+              if (onChanged == null) return;
+              final intValue = int.tryParse(value);
+              if (intValue == null) return;
+              final result = onChanged!(intValue);
+              controller.text = result.toString();
+              controller.selection = TextSelection.fromPosition(
+                TextPosition(offset: controller.text.length),
+              );
             },
           ),
         ),
