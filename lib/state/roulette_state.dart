@@ -52,17 +52,17 @@ class RouletteState extends _$RouletteState {
 
     final dateTime = DateTime.now();
 
-    while (state.isSpinning) {
+    do {
       state = state.copyWith(
         spinningValue: _getRandomValue(min, max),
       );
-      await Future.delayed(const Duration(milliseconds: 100));
 
       // 指定した時間が経過したらルーレットを停止する
       if (DateTime.now().difference(dateTime) >= duration) {
         break;
       }
-    }
+      await Future.delayed(const Duration(milliseconds: 100));
+    } while (state.isSpinning);
 
     state = Roulette(
       isSpinning: false,
