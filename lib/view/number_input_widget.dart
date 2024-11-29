@@ -27,17 +27,19 @@ class NumberInputWidget extends HookWidget {
         const SizedBox(width: 10),
         SizedBox(
           width: inputFieldWidth,
-          child: TextField(
-            controller: controller,
-            textAlign: TextAlign.end,
-            keyboardType: TextInputType.number,
-            inputFormatters: [
-              FilteringTextInputFormatter.digitsOnly,
-            ],
-            onChanged: (value) {
+          child: Focus(
+            child: TextField(
+              controller: controller,
+              textAlign: TextAlign.end,
+              keyboardType: TextInputType.number,
+              inputFormatters: [
+                FilteringTextInputFormatter.digitsOnly,
+              ],
+            ),
+            onFocusChange: (hasFocus) {
+              if (hasFocus) return;
               if (onChanged == null) return;
-              final intValue = int.tryParse(value);
-              if (intValue == null) return;
+              final intValue = int.tryParse(controller.text) ?? 0;
               final result = onChanged!(intValue);
               controller.text = result.toString();
               controller.selection = TextSelection.fromPosition(
